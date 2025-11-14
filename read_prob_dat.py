@@ -9,6 +9,7 @@ osc_E_tau = np.loadtxt("dune_oscillation_by_E_tau.dat")
 osc_L_tau = np.loadtxt("dune_oscillation_by_L_tau.dat")
 osc_matter_E = np.loadtxt("dune_oscillation_matter_by_E.dat")
 osc_matter_E_survival = np.loadtxt("dune_oscillation_matter_by_E_survival.dat")
+osc_matter_E_tau = np.loadtxt("dune_oscillation_matter_by_E_tau.dat")
 
 col1, col2 = osc_E[:, 0], osc_E[:, 1]
 col3, col4 = osc_L[:, 0], osc_L[:, 1]
@@ -18,6 +19,7 @@ col9, col10 = osc_E_tau[:, 0], osc_E_tau[:, 1]
 col11, col12 = osc_L_tau[:, 0], osc_L_tau[:, 1]
 col13, col14 = osc_matter_E[:, 0], osc_matter_E[:, 1]
 col15, col16 = osc_matter_E_survival[:, 0], osc_matter_E_survival[:, 1]
+col17, col18 = osc_matter_E_tau[:, 0], osc_matter_E_tau[:, 1]
 
 fig = plt.figure(figsize=(15, 8))
 gs = fig.add_gridspec(2, 2, height_ratios=[1, 1])
@@ -48,6 +50,7 @@ ax2.grid(True)
 
 ax3.plot(col13, col14, label=r'$\nu_\mu \rightarrow \nu_e$')
 ax3.plot(col15, col16, label=r'$\nu_\mu \rightarrow \nu_\mu$', color='red')
+ax3.plot(col17, col18, label=r'$\nu_\mu \rightarrow \nu_\tau$', linestyle='--', color='green')
 ax3.set_xlabel('Energy (GeV)')
 ax1.set_ylabel(r'Probability $\nu_\mu \rightarrow \nu_\alpha$')
 ax3.set_title('Constant Matter Density Oscillation Probability (L given by DUNE experiment file)')
