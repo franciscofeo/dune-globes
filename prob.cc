@@ -57,9 +57,9 @@ void calculateProbabilityByE(){
 
     double E, prob_by_E, prob_by_E_survival, prob_by_E_tau, prob_by_E_matter, prob_by_E_matter_survival;
     double E_start = 0.5;
-    double E_end = 20;
+    double E_end = 2.5;
     double step = 0.001;
-    double fixed_L = 20000.0; //20k km
+    double fixed_L = 1300.0;
 
     for (E = E_start; E <= E_end + step; E += step) {
         prob_by_E = glbVacuumProbability(1, 2, +1, E, fixed_L);
@@ -97,9 +97,9 @@ void calculateProbabilityByL(){
     output_by_L_tau.open("dune_oscillation_by_L_tau.dat");
 
     double L, prob_by_L, prob_by_L_survival, prob_by_L_tau;
-    double fixed_E = 0.75;
+    double fixed_E = 2.5;
     double L_start = 0.0;
-    double L_end = 20000.0;
+    double L_end = 2000.0;
     double big_step = 1;
 
     for (L = L_start; L <= L_end; L += big_step) {
