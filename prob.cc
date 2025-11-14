@@ -4,57 +4,51 @@
 #include <string>
 #include <vector>
 #include <globes/globes.h>
+#include "mixingParams.hpp"
 
 using namespace std;
 
 char AEDL_EXP[] = "DUNE_GLoBES.glb";
-void calculateProbabilityByE();
-void calculateProbabilityByL();
+void calculateProbabilityByE(string hierarchy);
+void calculateProbabilityByL(string hierarchy);
 
 int main(int args, char *argv[]){
     
     glbInit(argv[0]);
     glbInitExperiment(AEDL_EXP, &glb_experiment_list[0], &glb_num_of_exps);
 
-    /*
-    // Valor padrão que tinha nos slides
-    double theta12 = asin(sqrt(0.8))/2;
-    double theta13 = asin(sqrt(0.001))/2;
-    double theta23 = M_PI/4;
-    double deltacp = M_PI/2;
-    double sdm = 7e-5;
-    double ldm = 2e-3;
-    */
+    MixingParams params[2] = {
+        MixingParams(Ordering::NO),
+        MixingParams(Ordering::IO)
+    };
 
-    // https://globalfit.astroparticles.es/2018/02/09/empty/ -> Estou usando os valores de NO
-    double theta12 = asin(sqrt(0.318));
-    double theta13 = asin(sqrt(0.022));
-    double theta23 = asin(sqrt(0.574));
-    double deltacp = 1.08*M_PI;
-    double sdm = 7.5e-5;
-    double ldm = 2e-3;
+    for (int i = 0; i < 2; i++) {
+        MixingParams mixing_params = params[i];
+        cout << "\nCalculating Oscillation Probability from " + mixing_params.label + " hierarchy." << endl;
 
-    glb_params true_values = glbAllocParams();
-    glbDefineParams(true_values, theta12, theta13, theta23, deltacp, sdm, ldm);
-    glbSetDensityParams(true_values, 1.0, GLB_ALL);
-    glbSetOscillationParameters(true_values);
-    glbSetRates();
+        glb_params true_values = glbAllocParams();
+        glbDefineParams(true_values, mixing_params.theta12, mixing_params.theta13, mixing_params.theta23, mixing_params.deltacp, mixing_params.sdm, mixing_params.ldm);
+        glbSetDensityParams(true_values, 1.0, GLB_ALL);
+        glbSetOscillationParameters(true_values);
+        glbSetRates();
 
-    calculateProbabilityByE();
-    calculateProbabilityByL();
+        calculateProbabilityByE(mixing_params.label);
+        calculateProbabilityByL(mixing_params.label);
 
-    glbFreeParams(true_values);
+        glbFreeParams(true_values);
+    }
+
     return 0;
 }
 
-void calculateProbabilityByE(){
+void calculateProbabilityByE(string hierarchy){
     ofstream output_by_E, output_by_E_survival, output_by_E_tau, output_matter_by_E, output_matter_by_E_survival, output_matter_by_E_tau;
-    output_by_E.open("dune_oscillation_by_E.dat");
-    output_by_E_survival.open("dune_oscillation_by_E_survival.dat");
-    output_by_E_tau.open("dune_oscillation_by_E_tau.dat");
-    output_matter_by_E.open("dune_oscillation_matter_by_E.dat");
-    output_matter_by_E_survival.open("dune_oscillation_matter_by_E_survival.dat");
-    output_matter_by_E_tau.open("dune_oscillation_matter_by_E_tau.dat");
+    output_by_E.open(hierarchy + "_dune_oscillation_by_E.dat");
+    output_by_E_survival.open(hierarchy + "_dune_oscillation_by_E_survival.dat");
+    output_by_E_tau.open(hierarchy + "_dune_oscillation_by_E_tau.dat");
+    output_matter_by_E.open(hierarchy + "_dune_oscillation_matter_by_E.dat");
+    output_matter_by_E_survival.open(hierarchy + "_dune_oscillation_matter_by_E_survival.dat");
+    output_matter_by_E_tau.open(hierarchy + "_dune_oscillation_matter_by_E_tau.dat");
 
     double E, prob_by_E, prob_by_E_survival, prob_by_E_tau, prob_by_E_matter, prob_by_E_matter_survival, prob_by_E_matter_tau;
     double E_start = 0.5;
@@ -128,17 +122,17 @@ void calculateProbabilityByE(){
 
     cout << "================================================" << endl;
     cout << "Matter Oscillation Probabilities:" << endl;
-    cout << "Max electron appearance probability (E fixed): " << max_electron_prob_l_fixed_matter << endl;
-    cout << "Max muon survival probability (E fixed): " << max_muon_prob_l_fixed_matter << endl;
+    cout << "Max electron appearance probability (L fixed): " << max_electron_prob_l_fixed_matter << endl;
+    cout << "Max muon survival probability (L fixed): " << max_muon_prob_l_fixed_matter << endl;
     cout << "Max tau appearance probability (L fixed): " << max_tau_prob_l_fixed_matter << endl;
     cout << "================================================" << endl;
 }
 
-void calculateProbabilityByL(){
+void calculateProbabilityByL(string hierarchy){
     ofstream output_by_L, output_by_L_survival, output_by_L_tau;
-    output_by_L.open("dune_oscillation_by_L.dat");
-    output_by_L_survival.open("dune_oscillation_by_L_survival.dat");
-    output_by_L_tau.open("dune_oscillation_by_L_tau.dat");
+    output_by_L.open(hierarchy + "_dune_oscillation_by_L.dat");
+    output_by_L_survival.open(hierarchy + "_dune_oscillation_by_L_survival.dat");
+    output_by_L_tau.open(hierarchy + "_dune_oscillation_by_L_tau.dat");
 
     double L, prob_by_L, prob_by_L_survival, prob_by_L_tau;
     double fixed_E = 2.5;
@@ -178,5 +172,5 @@ void calculateProbabilityByL(){
     cout << "Max electron appearance probability (E fixed): " << max_electron_prob_e_fixed << endl;
     cout << "Max muon survival probability (E fixed): " << max_muon_prob_e_fixed << endl;
     cout << "Max tau appearance probability (E fixed): " << max_tau_prob_e_fixed << endl;
-    cout << "================================================" << endl;
+    cout << "================================================\n" << endl;
 }
