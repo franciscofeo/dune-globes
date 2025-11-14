@@ -27,10 +27,10 @@ int main(int args, char *argv[]){
     */
 
     // https://globalfit.astroparticles.es/2018/02/09/empty/ -> Estou usando os valores de NO
-    double theta12 = asin(sqrt(0.318))/2;
-    double theta13 = asin(sqrt(0.022))/2;
-    double theta23 = asin(sqrt(0.574))/2;
-    double deltacp = 1.08/M_PI;
+    double theta12 = asin(sqrt(0.318));
+    double theta13 = asin(sqrt(0.022));
+    double theta23 = asin(sqrt(0.574));
+    double deltacp = 1.08*M_PI;
     double sdm = 7.5e-5;
     double ldm = 2e-3;
 
@@ -48,39 +48,69 @@ int main(int args, char *argv[]){
 }
 
 void calculateProbabilityByE(){
-    ofstream output_by_E, output_by_E_survival, output_by_E_tau, output_matter_by_E, output_matter_by_E_survival;
+    ofstream output_by_E, output_by_E_survival, output_by_E_tau, output_matter_by_E, output_matter_by_E_survival, output_matter_by_E_tau;
     output_by_E.open("dune_oscillation_by_E.dat");
     output_by_E_survival.open("dune_oscillation_by_E_survival.dat");
     output_by_E_tau.open("dune_oscillation_by_E_tau.dat");
     output_matter_by_E.open("dune_oscillation_matter_by_E.dat");
     output_matter_by_E_survival.open("dune_oscillation_matter_by_E_survival.dat");
+    output_matter_by_E_tau.open("dune_oscillation_matter_by_E_tau.dat");
 
-    double E, prob_by_E, prob_by_E_survival, prob_by_E_tau, prob_by_E_matter, prob_by_E_matter_survival;
+    double E, prob_by_E, prob_by_E_survival, prob_by_E_tau, prob_by_E_matter, prob_by_E_matter_survival, prob_by_E_matter_tau;
     double E_start = 0.5;
     double E_end = 2.5;
     double step = 0.001;
     double fixed_L = 1300.0;
 
+    double max_electron_prob_l_fixed = 0;
+    double max_muon_prob_l_fixed = 0;
+    double max_tau_prob_l_fixed = 0;
+
     for (E = E_start; E <= E_end + step; E += step) {
-        prob_by_E = glbVacuumProbability(1, 2, +1, E, fixed_L);
+        prob_by_E = glbVacuumProbability(2, 1, +1, E, fixed_L);
+        if (prob_by_E > max_electron_prob_l_fixed) {
+            max_electron_prob_l_fixed = prob_by_E;
+        }
         output_by_E<<E<<"\t"<<prob_by_E<<endl;
 
-        prob_by_E_tau = glbVacuumProbability(1, 3, +1, E, fixed_L);
+        prob_by_E_tau = glbVacuumProbability(2, 3, +1, E, fixed_L);
+        if (prob_by_E_tau > max_tau_prob_l_fixed) {
+            max_tau_prob_l_fixed = prob_by_E_tau;
+        }
         output_by_E_tau<<E<<"\t"<<prob_by_E_tau<<endl;
 
-        prob_by_E_survival = glbVacuumProbability(1, 1, +1, E, fixed_L);
+        prob_by_E_survival = glbVacuumProbability(2, 2, +1, E, fixed_L);
+        if (prob_by_E_survival > max_muon_prob_l_fixed) {
+            max_muon_prob_l_fixed = prob_by_E_survival;
+        }
         output_by_E_survival<<E<<"\t"<<prob_by_E_survival<<endl;
     }
 
     double E_matter;
     double E_matter_end = 5;
 
+    double max_electron_prob_l_fixed_matter = 0;
+    double max_muon_prob_l_fixed_matter = 0;
+    double max_tau_prob_l_fixed_matter = 0;
+
     for(E_matter = E_start; E_matter <= E_matter_end + step; E_matter += step ){
-        prob_by_E_matter = glbFilteredConstantDensityProbability(0,1,2,+1, E_matter);
+        prob_by_E_matter = glbFilteredConstantDensityProbability(0,2,1,+1, E_matter);
+        if (prob_by_E_matter > max_electron_prob_l_fixed_matter) {
+            max_electron_prob_l_fixed_matter = prob_by_E_matter;
+        }
         output_matter_by_E<<E_matter<<"\t"<<prob_by_E_matter<<endl;
 
-        prob_by_E_matter_survival = glbFilteredConstantDensityProbability(0,1,1,+1, E_matter);
+        prob_by_E_matter_survival = glbFilteredConstantDensityProbability(0,2,2,+1, E_matter);
+        if (prob_by_E_matter_survival > max_muon_prob_l_fixed_matter) {
+            max_muon_prob_l_fixed_matter = prob_by_E_matter_survival;
+        }
         output_matter_by_E_survival<<E_matter<<"\t"<<prob_by_E_matter_survival<<endl;
+
+        prob_by_E_matter_tau = glbFilteredConstantDensityProbability(0,2,3,+1, E_matter);
+        if (prob_by_E_matter_tau > max_tau_prob_l_fixed_matter) {
+            max_tau_prob_l_fixed_matter = prob_by_E_matter_tau;
+        }
+        output_matter_by_E_tau<<E_matter<<"\t"<<prob_by_E_matter_tau<<endl;
     }
 
     output_by_E.close();
@@ -88,6 +118,20 @@ void calculateProbabilityByE(){
     output_by_E_tau.close();
     output_matter_by_E.close();
     output_matter_by_E_survival.close();
+    output_matter_by_E_tau.close();
+
+    cout << "================================================" << endl;
+    cout << "Vacuum Oscillation Probabilities:" << endl;
+    cout << "Max electron appearance probability (L fixed): " << max_electron_prob_l_fixed << endl;
+    cout << "Max muon survival probability (L fixed): " << max_muon_prob_l_fixed << endl;
+    cout << "Max tau appearance probability (L fixed): " << max_tau_prob_l_fixed << endl;
+
+    cout << "================================================" << endl;
+    cout << "Matter Oscillation Probabilities:" << endl;
+    cout << "Max electron appearance probability (E fixed): " << max_electron_prob_l_fixed_matter << endl;
+    cout << "Max muon survival probability (E fixed): " << max_muon_prob_l_fixed_matter << endl;
+    cout << "Max tau appearance probability (L fixed): " << max_tau_prob_l_fixed_matter << endl;
+    cout << "================================================" << endl;
 }
 
 void calculateProbabilityByL(){
@@ -102,18 +146,37 @@ void calculateProbabilityByL(){
     double L_end = 2000.0;
     double big_step = 1;
 
+    double max_electron_prob_e_fixed = 0;
+    double max_muon_prob_e_fixed = 0;
+    double max_tau_prob_e_fixed = 0;
+
     for (L = L_start; L <= L_end; L += big_step) {
-        prob_by_L = glbVacuumProbability(1, 2, +1, fixed_E, L);
+        prob_by_L = glbVacuumProbability(2, 1, +1, fixed_E, L);
+        if (prob_by_L > max_electron_prob_e_fixed) {
+            max_electron_prob_e_fixed = prob_by_L;
+        }
         output_by_L<<L<<"\t"<<prob_by_L<<endl;
 
-        prob_by_L_tau = glbVacuumProbability(1, 3, +1, fixed_E, L);
+        prob_by_L_tau = glbVacuumProbability(2, 3, +1, fixed_E, L);
+        if (prob_by_L_tau > max_tau_prob_e_fixed) {
+            max_tau_prob_e_fixed = prob_by_L_tau;
+        }
         output_by_L_tau<<L<<"\t"<<prob_by_L_tau<<endl;
 
-        prob_by_L_survival = glbVacuumProbability(1, 1, +1, fixed_E, L);
+        prob_by_L_survival = glbVacuumProbability(2, 2, +1, fixed_E, L);
+        if (prob_by_L_survival > max_muon_prob_e_fixed) {
+            max_muon_prob_e_fixed = prob_by_L_survival;
+        }
         output_by_L_survival<<L<<"\t"<<prob_by_L_survival<<endl;
     }
 
     output_by_L.close();
     output_by_L_survival.close();
     output_by_L_tau.close();
+
+    cout << "Vacuum Oscillation Probabilities:" << endl;
+    cout << "Max electron appearance probability (E fixed): " << max_electron_prob_e_fixed << endl;
+    cout << "Max muon survival probability (E fixed): " << max_muon_prob_e_fixed << endl;
+    cout << "Max tau appearance probability (E fixed): " << max_tau_prob_e_fixed << endl;
+    cout << "================================================" << endl;
 }
