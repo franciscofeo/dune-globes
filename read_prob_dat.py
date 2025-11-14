@@ -57,7 +57,6 @@ ax3.set_title('Constant Matter Density Oscillation Probability (L given by DUNE 
 ax3.legend(loc='best', fontsize=12)
 ax3.grid(True)
 
-# Adicionar informações no título geral
 fig.suptitle('DUNE: Neutrino Oscillation using GLoBES', fontsize=14, fontweight='bold', y=1.00)
 
 plt.subplots_adjust(top=0.93)
