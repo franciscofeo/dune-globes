@@ -29,7 +29,7 @@ ax2 = fig.add_subplot(gs[0, 1])
 ax3 = fig.add_subplot(gs[1, :])
 
 ax1.plot(col1, col2, label=r'$\nu_\mu \rightarrow \nu_e$')
-ax1.plot(col5, col6, label=r'$\nu_\mu \rightarrow \nu_e$', color='red')
+ax1.plot(col5, col6, label=r'$\nu_\mu \rightarrow \nu_\mu$', color='red')
 ax1.plot(col9, col10, label=r'$\nu_\mu \rightarrow \nu_\tau$', linestyle='--', color='green')
 ax1.set_xlabel('Energy (GeV)')
 ax1.set_ylabel(r'Probability $\nu_\mu \rightarrow \nu_\alpha$')
