@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <globes/globes.h>
-#include "mixingParams.hpp"
+#include "../common/mixingParams.hpp"
 
 using namespace std;
 
