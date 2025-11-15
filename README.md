@@ -99,7 +99,6 @@ The oscillation probability simulations generate the following data files (if no
 The correlation analysis generates:
 
 - `correlation_dcp_t13.dat` - χ² map for θ₁₃ and δ_CP correlation
-- `correlation_dcp_t13_contour.png` - Contour plot with confidence regions (1σ, 2σ, 3σ)
 
 ## Project Structure
 
