@@ -17,6 +17,10 @@ public:
     double sdm;
     double ldm;
 
+    /* https://globalfit.astroparticles.es/2018/02/09/empty/
+    * @param ordering - The ordering of the mixing parameters.
+    * @return The mixing parameters.
+    */
     MixingParams(Ordering ordering) {
         sdm = 7.5e-5;
         theta12 = asin(sqrt(0.318));
@@ -32,7 +36,7 @@ public:
             theta13 = asin(sqrt(0.02225));
             theta23 = asin(sqrt(0.578));
             deltacp = 1.58*M_PI;
-            ldm = 2.45e-3;
+            ldm = -2.45e-3;
         }
     }
 };

@@ -11,6 +11,8 @@ def plot_oscillation__graphs(hierarchy):
     osc_matter_E = np.loadtxt(hierarchy + "_dune_oscillation_matter_by_E.dat")
     osc_matter_E_survival = np.loadtxt(hierarchy + "_dune_oscillation_matter_by_E_survival.dat")
     osc_matter_E_tau = np.loadtxt(hierarchy + "_dune_oscillation_matter_by_E_tau.dat")
+    fhc_data = np.loadtxt('flux/flux_optimized_FHC.txt')
+
 
     col1, col2 = osc_E[:, 0], osc_E[:, 1]
     col3, col4 = osc_L[:, 0], osc_L[:, 1]
@@ -21,13 +23,15 @@ def plot_oscillation__graphs(hierarchy):
     col13, col14 = osc_matter_E[:, 0], osc_matter_E[:, 1]
     col15, col16 = osc_matter_E_survival[:, 0], osc_matter_E_survival[:, 1]
     col17, col18 = osc_matter_E_tau[:, 0], osc_matter_E_tau[:, 1]
+    col19, col20 = fhc_data[:, 0], fhc_data[:, 2]
 
     fig = plt.figure(figsize=(15, 8))
     gs = fig.add_gridspec(2, 2, height_ratios=[1, 1])
 
     ax1 = fig.add_subplot(gs[0, 0])
     ax2 = fig.add_subplot(gs[0, 1])
-    ax3 = fig.add_subplot(gs[1, :])
+    ax3 = fig.add_subplot(gs[1, 0])
+    ax4 = fig.add_subplot(gs[1, 1])
 
     ax1.plot(col1, col2, label=r'$\nu_\mu \rightarrow \nu_e$')
     ax1.plot(col5, col6, label=r'$\nu_\mu \rightarrow \nu_\mu$', color='red')
@@ -57,6 +61,15 @@ def plot_oscillation__graphs(hierarchy):
     ax3.set_title('Constant Matter Density Oscillation Probability (L given by DUNE experiment file)')
     ax3.legend(loc='best', fontsize=9)
     ax3.grid(True)
+
+    ax4.plot(col19, col20, label=r'$\nu_\mu$', color='blue')
+    ax4.set_xlabel('Energy (GeV)')
+    ax4.set_ylabel(r'Flux (u.a.)')
+    ax4.set_title('Flux of Neutrinos - FHC')
+    ax4.legend(loc='best', fontsize=9)
+    ax4.set_xlim(0, 10)
+    ax4.set_yscale('log')
+    ax4.grid(True)
 
     fig.suptitle('DUNE: Neutrino Oscillation using GLoBES - ' + hierarchy + ' hierarchy', fontsize=14, fontweight='bold', y=1.00)
 
