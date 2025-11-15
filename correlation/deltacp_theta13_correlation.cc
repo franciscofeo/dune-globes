@@ -9,38 +9,46 @@
 using namespace std;
 
 char AEDL_EXP[] = "DUNE_GLoBES.glb";
-void computeChiSquare(glb_params g);
+void computeChiSquare(glb_params g, string hierarchy);
 
 int main(int args, char* argv[]){
     glbInit(argv[0]);
     glbInitExperiment(AEDL_EXP, &glb_experiment_list[0], &glb_num_of_exps);
     
-    MixingParams params(Ordering::NO);
+    MixingParams mixingParams[2] = {
+        MixingParams(Ordering::NO),
+        MixingParams(Ordering::IO)
+    };
 
-    glb_params true_values, test_values;
-    true_values = glbAllocParams();
-    test_values = glbAllocParams();
+    for (int i = 0; i < 2; i++) {
+        MixingParams params = mixingParams[i];
+        cout << "\nCalculating Correlation between delta_cp and theta_13 from " + params.label + " hierarchy." << endl;
 
-    glbDefineParams(true_values, params.theta12, params.theta13, params.theta23, params.deltacp, params.sdm, params.ldm);
-    glbSetDensityParams(true_values, 1.0, GLB_ALL);
-
-    glbDefineParams(test_values, params.theta12, params.theta13, params.theta23, params.deltacp, params.sdm, params.ldm);
-    glbSetDensityParams(test_values, 1.0, GLB_ALL);
-
-    glbSetOscillationParameters(true_values);
-    glbSetRates();
-
-    computeChiSquare(test_values);
-
-    glbFreeParams(true_values);
-    glbFreeParams(test_values);
+        glb_params true_values, test_values;
+        true_values = glbAllocParams();
+        test_values = glbAllocParams();
+    
+        glbDefineParams(true_values, params.theta12, params.theta13, params.theta23, params.deltacp, params.sdm, params.ldm);
+        glbSetDensityParams(true_values, 1.0, GLB_ALL);
+    
+        glbDefineParams(test_values, params.theta12, params.theta13, params.theta23, params.deltacp, params.sdm, params.ldm);
+        glbSetDensityParams(test_values, 1.0, GLB_ALL);
+    
+        glbSetOscillationParameters(true_values);
+        glbSetRates();
+    
+        computeChiSquare(test_values, params.label);
+    
+        glbFreeParams(true_values);
+        glbFreeParams(test_values);
+    }
 
     return 0;
 }
 
-void computeChiSquare(glb_params g){
+void computeChiSquare(glb_params g, string hierarchy){
     ofstream output;
-    output.open("correlation_dcp_t13.dat");
+    output.open(hierarchy + "_correlation_dcp_t13.dat");
 
     double i, j, dcp, t13, result;
     double t13_initial = 0.122;
