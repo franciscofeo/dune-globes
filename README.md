@@ -1,6 +1,6 @@
 # DUNE GLoBES Configurations
 
-This project provides configuration files and simulation tools for the DUNE (Deep Underground Neutrino Experiment) using the GLoBES (General Long Baseline Experiment Simulator) framework. It calculates neutrino oscillation probabilities as functions of energy and baseline distance, incorporating realistic detector properties, beam flux data, cross-sections, efficiencies, and systematic uncertainties for the DUNE liquid argon detector.
+This project provides configuration files and simulation tools for the DUNE (Deep Underground Neutrino Experiment) using the GLoBES (General Long Baseline Experiment Simulator) framework. It calculates neutrino oscillation probabilities as functions of energy and baseline distance, and performs parameter correlation analyses (θ₁₃ vs δ_CP) using χ² statistics for both Normal and Inverted mass ordering scenarios. The simulations incorporate realistic detector properties, beam flux data, cross-sections, efficiencies, and systematic uncertainties for the DUNE liquid argon detector.
 
 ## Configuration Files Source
 
@@ -98,7 +98,9 @@ The oscillation probability simulations generate the following data files (if no
 
 The correlation analysis generates:
 
-- `correlation_dcp_t13.dat` - χ² map for θ₁₃ and δ_CP correlation
+- `NO_correlation_dcp_t13.dat` - χ² map for θ₁₃ and δ_CP correlation (Normal Ordering)
+- `IO_correlation_dcp_t13.dat` - χ² map for θ₁₃ and δ_CP correlation (Inverted Ordering)
+- `correlation/correlation_dcp_t13_contour.png` - Side-by-side contour plots comparing NO and IO scenarios
 
 ## Project Structure
 
