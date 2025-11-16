@@ -27,14 +27,14 @@ public:
 
         if (ordering == Ordering::NO) {
             label = "NO";
-            theta13 = asin(sqrt(0.022));
-            theta23 = asin(sqrt(0.574));
+            theta13 = asin(sqrt(0.022)/2);
+            theta23 = asin(sqrt(0.574)/2);
             deltacp = 1.08*M_PI;
             ldm = 2.55e-3;
         } else {
             label = "IO";
-            theta13 = asin(sqrt(0.02225));
-            theta23 = asin(sqrt(0.578));
+            theta13 = asin(sqrt(0.02225)/2);
+            theta23 = asin(sqrt(0.578)/2);
             deltacp = 1.58*M_PI;
             ldm = -2.45e-3;
         }

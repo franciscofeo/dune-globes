@@ -22,7 +22,7 @@ int main(int args, char* argv[]){
 
     for (int i = 0; i < 2; i++) {
         MixingParams params = mixingParams[i];
-        cout << "\nCalculating Correlation between delta_cp and theta_13 from " + params.label + " hierarchy." << endl;
+        cout << "\nCalculating Correlation between delta_cp and theta_23 from " + params.label + " hierarchy." << endl;
 
         glb_params true_values, test_values;
         true_values = glbAllocParams();
@@ -48,39 +48,39 @@ int main(int args, char* argv[]){
 
 void computeChiSquare(glb_params g, string hierarchy){
     ofstream output;
-    output.open(hierarchy + "_correlation_dcp_t13.dat");
+    output.open(hierarchy + "_correlation_dcp_t23.dat");
 
-    double i, j, dcp, t13, result;
-    double t13_initial = 0.122;
-    double t13_final = 0.175;
-    double dcp_initial = 0;
+    double i, j, dcp, t23, result;
+    double t23_initial = 0.300;
+    double t23_final = 0.500;
+    double dcp_initial = -2*M_PI;
     double dcp_final = 2*M_PI;
     double steps = 100;
 
     double min_chi2 = 1000;
-    double best_t13 = 0;
+    double best_t23 = 0;
     double best_dcp = 0;
 
     for(i = 1; i <= steps; i++){
         for(j = 1; j <= steps; j++){
-            t13 = t13_initial + i*(t13_final - t13_initial)/100;
+            t23 = t23_initial + i*(t23_final - t23_initial)/100;
             dcp = dcp_initial +j*(dcp_final - dcp_initial)/100;
 
-            glbSetOscParams(g, t13, GLB_THETA_13);
+            glbSetOscParams(g, t23, GLB_THETA_23);
             glbSetOscParams(g, dcp, GLB_DELTA_CP);
 
             result = glbChiSys(g, GLB_ALL, GLB_ALL);
             if (result < min_chi2) {
                 min_chi2 = result;
-                best_t13 = t13;
+                best_t23 = t23;
                 best_dcp = dcp;
             }
-            output << t13 << "\t" << dcp << "\t" << result << endl;
+            output << t23 << "\t" << dcp << "\t" << result << endl;
         }
     }
 
     cout << "Min chi^2: " << min_chi2 << endl;
-    cout << "Best theta_13: " << best_t13 << endl;
+    cout << "Best theta_23: " << best_t23 << endl;
     cout << "Best delta_cp: " << best_dcp << endl;
 
     output.close();
