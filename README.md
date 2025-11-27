@@ -1,6 +1,6 @@
 # DUNE GLoBES Configurations
 
-This project provides configuration files and simulation tools for the DUNE (Deep Underground Neutrino Experiment) using the GLoBES (General Long Baseline Experiment Simulator) framework. It calculates neutrino oscillation probabilities as functions of energy and baseline distance, and performs parameter correlation analyses (θ₁₃ vs δ_CP) using χ² statistics for both Normal and Inverted mass ordering scenarios. The simulations incorporate realistic detector properties, beam flux data, cross-sections, efficiencies, and systematic uncertainties for the DUNE liquid argon detector.
+This project provides configuration files and simulation tools for the DUNE (Deep Underground Neutrino Experiment) using the GLoBES (General Long Baseline Experiment Simulator) framework. It calculates neutrino oscillation probabilities as functions of energy, baseline distance, and matter density, and performs parameter correlation analyses (θ₂₃ vs δ_CP) using χ² statistics for both Normal and Inverted mass ordering scenarios. The simulations incorporate realistic detector properties, beam flux data, cross-sections, efficiencies, and systematic uncertainties for the DUNE liquid argon detector.
 
 ## Configuration Files Source
 
@@ -31,7 +31,10 @@ make prob-run
 
 This target will:
 1. Compile the C++ program (`oscilation_probability/prob.cc`)
-2. Run the oscillation probability simulation
+2. Run oscillation probability simulations for both NO and IO scenarios, calculating:
+   - Probabilities vs energy (vacuum and matter effects)
+   - Probabilities vs baseline distance
+   - Probabilities vs matter density
 3. Execute the Python script to process and visualize the output data
 4. Keep all generated `.dat` files in the working directory
 
@@ -45,9 +48,9 @@ make prob-run-clean
 
 This target will:
 1. Compile the C++ program (`oscilation_probability/prob.cc`)
-2. Run the oscillation probability simulation
+2. Run oscillation probability simulations for both NO and IO scenarios
 3. Execute the Python script to process and visualize the output data
-4. Remove all generated `.dat` files after processing
+4. Remove all generated `.dat` files after processing (keeps visualization plots)
 
 ### Parameter Correlation Analysis
 
@@ -83,16 +86,24 @@ This target will:
 
 ### Oscillation Probability Simulations
 
-The oscillation probability simulations generate the following data files (if not cleaned):
+The oscillation probability simulations generate the following data files for both Normal Ordering (NO) and Inverted Ordering (IO) (if not cleaned):
 
-- `dune_oscillation_by_E.dat` - Oscillation probability vs. energy
-- `dune_oscillation_by_E_survival.dat` - Survival probability vs. energy
-- `dune_oscillation_by_E_tau.dat` - Tau appearance probability vs. energy
-- `dune_oscillation_matter_by_E.dat` - Matter effects vs. energy
-- `dune_oscillation_matter_by_E_survival.dat` - Matter survival probability vs. energy
-- `dune_oscillation_by_L.dat` - Oscillation probability vs. baseline distance
-- `dune_oscillation_by_L_survival.dat` - Survival probability vs. baseline distance
-- `dune_oscillation_by_L_tau.dat` - Tau appearance probability vs. baseline distance
+**Energy-dependent oscillations:**
+- `{NO,IO}_dune_oscillation_by_E.dat` - Vacuum oscillation probability vs. energy
+- `{NO,IO}_dune_oscillation_by_E_survival.dat` - Vacuum survival probability vs. energy
+- `{NO,IO}_dune_oscillation_by_E_tau.dat` - Vacuum tau appearance probability vs. energy
+- `{NO,IO}_dune_oscillation_matter_by_E.dat` - Matter effects vs. energy
+- `{NO,IO}_dune_oscillation_matter_by_E_survival.dat` - Matter survival probability vs. energy
+- `{NO,IO}_dune_oscillation_matter_by_E_tau.dat` - Matter tau appearance probability vs. energy
+
+**Baseline-dependent oscillations:**
+- `{NO,IO}_dune_oscillation_by_L.dat` - Vacuum oscillation probability vs. baseline distance
+- `{NO,IO}_dune_oscillation_by_L_survival.dat` - Vacuum survival probability vs. baseline distance
+- `{NO,IO}_dune_oscillation_by_L_tau.dat` - Vacuum tau appearance probability vs. baseline distance
+
+**Density-dependent oscillations:**
+- `{NO,IO}_dune_oscillation_by_density.dat` - Oscillation probability vs. matter density
+- `{NO,IO}_dune_oscillation_vacuum_by_density.dat` - Vacuum probability reference vs. matter density
 
 ### Correlation Analysis
 
@@ -100,7 +111,10 @@ The correlation analysis generates:
 
 - `NO_correlation_dcp_t13.dat` - χ² map for θ₁₃ and δ_CP correlation (Normal Ordering)
 - `IO_correlation_dcp_t13.dat` - χ² map for θ₁₃ and δ_CP correlation (Inverted Ordering)
-- `correlation/correlation_dcp_t13_contour.png` - Side-by-side contour plots comparing NO and IO scenarios
+- `NO_correlation_dcp_t23.dat` - χ² map for θ₂₃ and δ_CP correlation (Normal Ordering)
+- `IO_correlation_dcp_t23.dat` - χ² map for θ₂₃ and δ_CP correlation (Inverted Ordering)
+- `correlation/correlation_dcp_t13_contour.png` - Side-by-side contour plots comparing NO and IO scenarios for θ₁₃ vs δ_CP
+- `correlation/correlation_dcp_t23_contour.png` - Side-by-side contour plots comparing NO and IO scenarios for θ₂₃ vs δ_CP
 
 ## Project Structure
 
@@ -115,12 +129,12 @@ The correlation analysis generates:
 │   └── mixingParams.hpp            # Neutrino mixing parameters definitions
 │
 ├── oscilation_probability/         # Oscillation probability simulations
-│   ├── prob.cc                     # C++ simulation program
+│   ├── prob.cc                     # C++ simulation program (E, L, and density scans)
 │   ├── prob_make.sh                # Build and run script
 │   └── read_prob_dat.py            # Python visualization script
 │
 ├── correlation/                    # Parameter correlation analysis
-│   ├── deltacp_theta13_correlation.cc  # C++ correlation analysis
+│   ├── deltacp_theta23_correlation.cc  # C++ θ₂₃ vs δ_CP correlation analysis
 │   ├── correlation_make.sh         # Build and run script
 │   └── plot_contour_correlation.py # Python contour plotting script
 │

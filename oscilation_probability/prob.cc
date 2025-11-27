@@ -11,6 +11,7 @@ using namespace std;
 char AEDL_EXP[] = "DUNE_GLoBES.glb";
 void calculateProbabilityByE(string hierarchy);
 void calculateProbabilityByL(string hierarchy);
+void calculateProbabilityByDensity(string hierarchy);
 
 int main(int args, char *argv[]){
     
@@ -34,6 +35,7 @@ int main(int args, char *argv[]){
 
         calculateProbabilityByE(mixing_params.label);
         calculateProbabilityByL(mixing_params.label);
+        calculateProbabilityByDensity(mixing_params.label);
 
         glbFreeParams(true_values);
     }
@@ -173,4 +175,28 @@ void calculateProbabilityByL(string hierarchy){
     cout << "Max muon survival probability (E fixed): " << max_muon_prob_e_fixed << endl;
     cout << "Max tau appearance probability (E fixed): " << max_tau_prob_e_fixed << endl;
     cout << "================================================\n" << endl;
+}
+
+void calculateProbabilityByDensity(string hierarchy){
+    ofstream output_by_density, output_vacuum_by_density;
+    output_by_density.open(hierarchy + "_dune_oscillation_by_density.dat");
+    output_vacuum_by_density.open(hierarchy + "_dune_oscillation_vacuum_by_density.dat");
+
+    double density, prob_by_density, prob_vacuum;
+    double E = 2.5;
+    double L = 1300;
+    double density_start = 0.0;
+    double density_end = 100.0;
+    double step = 0.01;
+
+    for (density = density_start; density <= density_end; density += step) {
+        prob_by_density = glbConstantDensityProbability(2, 1, +1, E, L, density);
+        output_by_density << density << "\t" << prob_by_density << endl;
+        
+        prob_vacuum = glbVacuumProbability(2, 1, +1, E, L);
+        output_vacuum_by_density << density << "\t" << prob_vacuum << endl;
+    }
+
+    output_by_density.close();
+    output_vacuum_by_density.close();
 }

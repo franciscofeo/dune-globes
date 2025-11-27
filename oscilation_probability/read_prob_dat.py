@@ -11,7 +11,8 @@ def plot_oscillation__graphs(hierarchy):
     osc_matter_E = np.loadtxt(hierarchy + "_dune_oscillation_matter_by_E.dat")
     osc_matter_E_survival = np.loadtxt(hierarchy + "_dune_oscillation_matter_by_E_survival.dat")
     osc_matter_E_tau = np.loadtxt(hierarchy + "_dune_oscillation_matter_by_E_tau.dat")
-    fhc_data = np.loadtxt('flux/flux_optimized_FHC.txt')
+    osc_density = np.loadtxt(hierarchy + "_dune_oscillation_by_density.dat")
+    osc_vacuum_density = np.loadtxt(hierarchy + "_dune_oscillation_vacuum_by_density.dat")
 
 
     col1, col2 = osc_E[:, 0], osc_E[:, 1]
@@ -23,7 +24,8 @@ def plot_oscillation__graphs(hierarchy):
     col13, col14 = osc_matter_E[:, 0], osc_matter_E[:, 1]
     col15, col16 = osc_matter_E_survival[:, 0], osc_matter_E_survival[:, 1]
     col17, col18 = osc_matter_E_tau[:, 0], osc_matter_E_tau[:, 1]
-    col19, col20 = fhc_data[:, 0], fhc_data[:, 2]
+    col19, col20 = osc_density[:, 0], osc_density[:, 1]
+    col21, col22 = osc_vacuum_density[:, 0], osc_vacuum_density[:, 1]
 
     fig = plt.figure(figsize=(15, 8))
     gs = fig.add_gridspec(2, 2, height_ratios=[1, 1])
@@ -62,13 +64,12 @@ def plot_oscillation__graphs(hierarchy):
     ax3.legend(loc='best', fontsize=9)
     ax3.grid(True)
 
-    ax4.plot(col19, col20, label=r'$\nu_\mu$', color='blue')
-    ax4.set_xlabel('Energy (GeV)')
-    ax4.set_ylabel(r'Flux (u.a.)')
-    ax4.set_title('Flux of Neutrinos - FHC')
+    ax4.plot(col19, col20, label=r'$\nu_\mu \rightarrow \nu_e$ in matter', color='blue')
+    ax4.plot(col21, col22, label=r'$\nu_\mu \rightarrow \nu_e$ in vacuum ($\rho = 0$ g/cm³)', color='green', linestyle='--')
+    ax4.set_xlabel('Density (g/cm³)')
+    ax4.set_ylabel(r'Probability $\nu_\mu \rightarrow \nu_\alpha$')
+    ax4.set_title('Constant Matter Density Oscillation Probability (E = 2.5 GeV, L = 1300 km) - ' + hierarchy + ' hierarchy')
     ax4.legend(loc='best', fontsize=9)
-    ax4.set_xlim(0, 10)
-    ax4.set_yscale('log')
     ax4.grid(True)
 
     fig.suptitle('DUNE: Neutrino Oscillation using GLoBES - ' + hierarchy + ' hierarchy', fontsize=14, fontweight='bold', y=1.00)
@@ -88,3 +89,5 @@ try:
     plot_oscillation__graphs("IO")
 except Exception as e:
     print(f"Error to create 'IO' plots from .dat files. Verify if the filename is correct. {e}")
+
+
