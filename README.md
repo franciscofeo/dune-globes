@@ -63,7 +63,7 @@ make corr-run
 ```
 
 This target will:
-1. Compile the C++ program (`correlation/deltacp_theta13_correlation.cc`)
+1. Compile the C++ program (`correlation/deltacp_theta23_correlation.cc`)
 2. Run the χ² correlation analysis
 3. Generate contour plots showing confidence regions
 4. Keep all generated `.dat` and `.png` files in the working directory
@@ -77,7 +77,7 @@ make corr-run-clean
 ```
 
 This target will:
-1. Compile the C++ program (`correlation/deltacp_theta13_correlation.cc`)
+1. Compile the C++ program (`correlation/deltacp_theta23_correlation.cc`)
 2. Run the χ² correlation analysis
 3. Generate contour plots showing confidence regions
 4. Remove all generated `.dat` files after processing (keeps `.png` plots)
@@ -109,11 +109,8 @@ The oscillation probability simulations generate the following data files for bo
 
 The correlation analysis generates:
 
-- `NO_correlation_dcp_t13.dat` - χ² map for θ₁₃ and δ_CP correlation (Normal Ordering)
-- `IO_correlation_dcp_t13.dat` - χ² map for θ₁₃ and δ_CP correlation (Inverted Ordering)
 - `NO_correlation_dcp_t23.dat` - χ² map for θ₂₃ and δ_CP correlation (Normal Ordering)
 - `IO_correlation_dcp_t23.dat` - χ² map for θ₂₃ and δ_CP correlation (Inverted Ordering)
-- `correlation/correlation_dcp_t13_contour.png` - Side-by-side contour plots comparing NO and IO scenarios for θ₁₃ vs δ_CP
 - `correlation/correlation_dcp_t23_contour.png` - Side-by-side contour plots comparing NO and IO scenarios for θ₂₃ vs δ_CP
 
 ## Project Structure
