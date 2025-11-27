@@ -56,7 +56,7 @@ This target will:
 
 #### `make corr-run`
 
-Executes the correlation analysis between θ₁₃ and δ_CP parameters, keeping the generated files:
+Executes the correlation analysis between θ₂₃ and δ_CP parameters, keeping the generated files:
 
 ```bash
 make corr-run
