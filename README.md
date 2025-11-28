@@ -1,6 +1,6 @@
 # DUNE GLoBES Configurations
 
-This project provides configuration files and simulation tools for the DUNE (Deep Underground Neutrino Experiment) using the GLoBES (General Long Baseline Experiment Simulator) framework. It calculates neutrino oscillation probabilities as functions of energy, baseline distance, and matter density, and performs parameter correlation analyses (θ₂₃ vs δ_CP) using χ² statistics for both Normal and Inverted mass ordering scenarios. The simulations incorporate realistic detector properties, beam flux data, cross-sections, efficiencies, and systematic uncertainties for the DUNE liquid argon detector.
+This project provides configuration files and simulation tools for the DUNE (Deep Underground Neutrino Experiment) using the GLoBES (General Long Baseline Experiment Simulator) framework. It calculates neutrino oscillation probabilities as functions of energy, baseline distance, and matter density, and performs parameter correlation analyses (θ₂₃ vs δ_CP) using χ² statistics for both Normal and Inverted mass ordering scenarios and calculate event distribution for disappearance and appearance channels. The simulations incorporate realistic detector properties, beam flux data, cross-sections, efficiencies, and systematic uncertainties for the DUNE liquid argon detector.
 
 ## Configuration Files Source
 
@@ -17,7 +17,7 @@ To run this project, you need the following dependencies:
 
 ## How to Run
 
-The project includes a `Makefile` with four available targets organized by simulation type:
+The project includes a `Makefile` with six available targets organized by simulation type:
 
 ### Oscillation Probability Simulations
 
@@ -82,6 +82,36 @@ This target will:
 3. Generate contour plots showing confidence regions
 4. Remove all generated `.dat` files after processing (keeps `.png` plots)
 
+### Event Counter
+
+#### `make ec-run`
+
+Executes the event counter simulation for neutrino appearance and disappearance channels, keeping the generated files:
+
+```bash
+make ec-run
+```
+
+This target will:
+1. Compile the C++ program (`events_counter/event_counter.cc`)
+2. Calculate the expected number of events for νe appearance and νμ disappearance
+3. Generate event distribution plots showing signal and background vs. energy
+4. Keep all generated `.dat` and `.png` files in the working directory
+
+#### `make ec-run-clean`
+
+Executes the event counter workflow and automatically cleans up the generated `.dat` files:
+
+```bash
+make ec-run-clean
+```
+
+This target will:
+1. Compile the C++ program (`events_counter/event_counter.cc`)
+2. Calculate the expected number of events for νe appearance and νμ disappearance
+3. Generate event distribution plots showing signal and background vs. energy
+4. Remove all generated `.dat` files after processing (keeps visualization plots)
+
 ## Output Files
 
 ### Oscillation Probability Simulations
@@ -113,6 +143,14 @@ The correlation analysis generates:
 - `IO_correlation_dcp_t23.dat` - χ² map for θ₂₃ and δ_CP correlation (Inverted Ordering)
 - `correlation/correlation_dcp_t23_contour.png` - Side-by-side contour plots comparing NO and IO scenarios for θ₂₃ vs δ_CP
 
+### Event Counter
+
+The event counter simulation generates (if not cleaned):
+
+- `num_events_nue_appearance.dat` - Energy distribution of signal and background events for νe appearance
+- `num_events_numu_disappearance.dat` - Energy distribution of signal and background events for νμ disappearance
+- `events_distribution.png` - Side-by-side bar plots showing event distributions for both channels with total event statistics
+
 ## Project Structure
 
 ```
@@ -134,6 +172,11 @@ The correlation analysis generates:
 │   ├── deltacp_theta23_correlation.cc  # C++ θ₂₃ vs δ_CP correlation analysis
 │   ├── correlation_make.sh         # Build and run script
 │   └── plot_contour_correlation.py # Python contour plotting script
+│
+├── events_counter/                 # Event counter simulations
+│   ├── event_counter.cc            # C++ event counting program (νe appearance and νμ disappearance)
+│   ├── ec_make.sh                  # Build and run script
+│   └── plot_events.py              # Python event distribution plotting script
 │
 ├── flux/                           # Neutrino flux data
 │   ├── flux_optimized_FHC.txt      # Forward Horn Current flux

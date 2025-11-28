@@ -17,3 +17,12 @@ corr-run-clean:
 	@echo "Executing Correlation C++ program and Python script."
 	@source correlation/correlation_make.sh
 	@python3 correlation/plot_contour_correlation.py && echo "Removing simulation .dat files." && rm *.dat
+
+ec-run:
+	@echo "Executing Event Counter C++ program and Python script."
+	@source events_counter/ec_make.sh && python3 events_counter/plot_events.py
+
+ec-run-clean:
+	@echo "Executing Event Counter C++ program and Python script."
+	@source events_counter/ec_make.sh
+	@python3 events_counter/plot_events.py && echo "Removing simulation .dat files." && rm *.dat
